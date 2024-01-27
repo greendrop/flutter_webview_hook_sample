@@ -2,6 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_webview_hook_sample/feature/webview/hook/use_initial_url_effect.dart';
+import 'package:flutter_webview_hook_sample/feature/webview/hook/use_pull_to_refresh_controller.dart';
+import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can_go_back.dart';
+import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can_go_back_effect.dart';
+import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_controller.dart';
 import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
 import 'package:flutter_webview_hook_sample/widget/body_container.dart';
 import 'package:go_router/go_router.dart';
@@ -20,30 +25,18 @@ class WebViewPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final webViewController = useRef<InAppWebViewController?>(null);
+    final webViewController = useWebViewController();
     final currentUrl = useState(initialUrl);
     final currentProgress = useState(0);
-    final canGoBack = useState(false);
-    final canGoBackSnapshot = useFuture(webViewController.value?.canGoBack());
+    final canGoBack = useWebViewCanGoBack();
 
-    useEffect(
-      () {
-        webViewController.value
-            ?.loadUrl(
-              urlRequest: URLRequest(url: WebUri(initialUrl)),
-            )
-            .then((value) => webViewController.value?.clearHistory());
-        return () {};
-      },
-      [initialUrl],
+    useInitialUrlEffect(
+      webViewController: webViewController,
+      initialUrl: initialUrl,
     );
-
-    useEffect(
-      () {
-        canGoBack.value = canGoBackSnapshot.data ?? false;
-        return () {};
-      },
-      [canGoBackSnapshot.data],
+    useWebViewCanGoBackEffect(
+      webViewController: webViewController,
+      setCanGoBack: canGoBack.setState,
     );
 
     return Scaffold(
@@ -51,7 +44,7 @@ class WebViewPage extends HookConsumerWidget {
         context,
         ref,
         webViewController: webViewController,
-        showLeading: canGoBack.value,
+        showLeading: canGoBack.state,
       ),
       body: SafeArea(
         child: BodyContainer(
@@ -118,78 +111,73 @@ class WebViewPage extends HookConsumerWidget {
   }) {
     final GlobalKey webViewKey = useMemoized(GlobalKey.new);
     final webViewSettings = useMemoized(buildWebViewSettings);
-    final pullToRefreshController = useMemoized(
-      () => buildPullToRefreshController(
-        webViewController: webViewController,
-      ),
-    );
+    final pullToRefreshController =
+        usePullToRefreshController(webViewController: webViewController);
 
-    return Expanded(
-      child: Stack(
-        children: [
-          InAppWebView(
-            key: webViewKey,
-            initialUrlRequest: URLRequest(url: WebUri(initialUrl)),
-            initialSettings: webViewSettings,
-            pullToRefreshController: pullToRefreshController,
-            onWebViewCreated: (controller) {
-              webViewController.value = controller;
-            },
-            onLoadStart: (controller, url) {
-              currentUrl.value = url.toString();
-            },
-            onPermissionRequest: (controller, request) async {
-              return PermissionResponse(
-                resources: request.resources,
-                action: PermissionResponseAction.GRANT,
-              );
-            },
-            shouldOverrideUrlLoading: (controller, navigationAction) async {
-              final uri = navigationAction.request.url!;
+    return Stack(
+      children: [
+        InAppWebView(
+          key: webViewKey,
+          initialUrlRequest: URLRequest(url: WebUri(initialUrl)),
+          initialSettings: webViewSettings,
+          pullToRefreshController: pullToRefreshController,
+          onWebViewCreated: (controller) {
+            webViewController.value = controller;
+          },
+          onLoadStart: (controller, url) {
+            currentUrl.value = url.toString();
+          },
+          onPermissionRequest: (controller, request) async {
+            return PermissionResponse(
+              resources: request.resources,
+              action: PermissionResponseAction.GRANT,
+            );
+          },
+          shouldOverrideUrlLoading: (controller, navigationAction) async {
+            final uri = navigationAction.request.url!;
 
-              if (![
-                'http',
-                'https',
-                'file',
-                'chrome',
-                'data',
-                'javascript',
-                'about',
-              ].contains(uri.scheme)) {
-                if (await canLaunchUrl(uri)) {
-                  // Launch the App
-                  await launchUrl(
-                    uri,
-                  );
-                  // and cancel the request
-                  return NavigationActionPolicy.CANCEL;
-                }
+            if (![
+              'http',
+              'https',
+              'file',
+              'chrome',
+              'data',
+              'javascript',
+              'about',
+            ].contains(uri.scheme)) {
+              if (await canLaunchUrl(uri)) {
+                // Launch the App
+                await launchUrl(
+                  uri,
+                );
+                // and cancel the request
+                return NavigationActionPolicy.CANCEL;
               }
+            }
 
-              return NavigationActionPolicy.ALLOW;
-            },
-            onLoadStop: (controller, url) async {
-              await pullToRefreshController?.endRefreshing();
-            },
-            onReceivedError: (controller, request, error) {
+            return NavigationActionPolicy.ALLOW;
+          },
+          onLoadStop: (controller, url) async {
+            await pullToRefreshController?.endRefreshing();
+          },
+          onReceivedError: (controller, request, error) {
+            pullToRefreshController?.endRefreshing();
+          },
+          onProgressChanged: (controller, progress) {
+            if (progress == 100) {
               pullToRefreshController?.endRefreshing();
-            },
-            onProgressChanged: (controller, progress) {
-              if (progress == 100) {
-                pullToRefreshController?.endRefreshing();
-              }
-              currentProgress.value = progress;
-            },
-            onUpdateVisitedHistory: (controller, url, androidIsReload) {
-              currentUrl.value = url.toString();
-            },
-            onConsoleMessage: (controller, consoleMessage) {},
-          ),
-          currentProgress.value < 100
-              ? LinearProgressIndicator(value: currentProgress.value / 100)
-              : Container(),
-        ],
-      ),
+            }
+            currentProgress.value = progress;
+          },
+          onUpdateVisitedHistory: (controller, url, androidIsReload) {
+            currentUrl.value = url.toString();
+          },
+          onConsoleMessage: (controller, consoleMessage) {},
+        ),
+        currentProgress.value < 100
+            ? LinearProgressIndicator(value: currentProgress.value / 100)
+            : Container(),
+      ],
     );
   }
 
@@ -200,28 +188,6 @@ class WebViewPage extends HookConsumerWidget {
       allowsInlineMediaPlayback: true,
       iframeAllow: 'camera; microphone',
       iframeAllowFullscreen: true,
-    );
-  }
-
-  PullToRefreshController? buildPullToRefreshController({
-    required ObjectRef<InAppWebViewController?> webViewController,
-  }) {
-    if (kIsWeb) {
-      return null;
-    }
-
-    return PullToRefreshController(
-      settings: PullToRefreshSettings(),
-      onRefresh: () async {
-        if (defaultTargetPlatform == TargetPlatform.android) {
-          await webViewController.value?.reload();
-        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-          await webViewController.value?.loadUrl(
-            urlRequest:
-                URLRequest(url: await webViewController.value?.getUrl()),
-          );
-        }
-      },
     );
   }
 }
