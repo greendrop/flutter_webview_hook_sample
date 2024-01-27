@@ -7,10 +7,12 @@ import 'package:flutter_webview_hook_sample/feature/webview/hook/use_pull_to_ref
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can_go_back.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can_go_back_effect.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_controller.dart';
+import 'package:flutter_webview_hook_sample/hook/use_app_logger.dart';
 import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
 import 'package:flutter_webview_hook_sample/widget/body_container.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WebViewPage extends HookConsumerWidget {
@@ -25,6 +27,7 @@ class WebViewPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appLogger = useAppLogger();
     final webViewController = useWebViewController();
     final currentUrl = useState(initialUrl);
     final currentProgress = useState(0);
@@ -51,6 +54,7 @@ class WebViewPage extends HookConsumerWidget {
           child: _body(
             context,
             ref,
+            appLogger: appLogger,
             webViewController: webViewController,
             currentUrl: currentUrl,
             currentProgress: currentProgress,
@@ -105,6 +109,7 @@ class WebViewPage extends HookConsumerWidget {
   Widget _body(
     BuildContext context,
     WidgetRef ref, {
+    required Logger appLogger,
     required ObjectRef<InAppWebViewController?> webViewController,
     required ValueNotifier<String> currentUrl,
     required ValueNotifier<int> currentProgress,
@@ -172,7 +177,14 @@ class WebViewPage extends HookConsumerWidget {
           onUpdateVisitedHistory: (controller, url, androidIsReload) {
             currentUrl.value = url.toString();
           },
-          onConsoleMessage: (controller, consoleMessage) {},
+          onConsoleMessage: (controller, consoleMessage) {
+            appLogger.i(
+              {
+                'message': 'WebViewPage#onConsoleMessage',
+                'consoleMessage': consoleMessage.toString(),
+              }.toString(),
+            );
+          },
         ),
         currentProgress.value < 100
             ? LinearProgressIndicator(value: currentProgress.value / 100)
