@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_webview_hook_sample/feature/locale_setting/widget/locale_setting_page.dart';
 import 'package:flutter_webview_hook_sample/feature/not_found/widget/not_found_page.dart';
 import 'package:flutter_webview_hook_sample/feature/setting/widget/setting_page.dart';
-import 'package:flutter_webview_hook_sample/feature/webview/webview_page.dart';
+import 'package:flutter_webview_hook_sample/feature/webview/widget/webview_page.dart';
 import 'package:flutter_webview_hook_sample/riverpod/app_logger.dart';
 import 'package:flutter_webview_hook_sample/widget/scaffold_with_nav_bar.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +13,9 @@ import 'package:logger/logger.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 
-GoRouter useAppRouter({String initialLocation = '/webview'}) {
+GoRouter useAppRouter({
+  String initialLocation = '/webview?initial_url=https%3A%2F%2Fwww.google.com',
+}) {
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: initialLocation,
@@ -28,7 +30,9 @@ GoRouter useAppRouter({String initialLocation = '/webview'}) {
             path: '/webview',
             name: WebViewPage.routeName,
             builder: (context, state) {
-              return const WebViewPage();
+              final initialUrl =
+                  state.uri.queryParameters['initial_url'] ?? 'about:blank';
+              return WebViewPage(initialUrl: initialUrl);
             },
           ),
           GoRoute(
