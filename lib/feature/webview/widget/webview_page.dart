@@ -7,6 +7,7 @@ import 'package:flutter_webview_hook_sample/feature/webview/hook/use_pull_to_ref
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can_go_back.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can_go_back_effect.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_controller.dart';
+import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_request_go_back_effect.dart';
 import 'package:flutter_webview_hook_sample/hook/use_app_logger.dart';
 import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
 import 'package:flutter_webview_hook_sample/hook/use_url_launcher_wrapper.dart';
@@ -41,6 +42,9 @@ class WebViewPage extends HookConsumerWidget {
     useWebViewCanGoBackEffect(
       webViewController: webViewController,
       setCanGoBack: canGoBack.setState,
+    );
+    useWebViewRequestGoBackEffect(
+      webViewController: webViewController,
     );
 
     return Scaffold(
