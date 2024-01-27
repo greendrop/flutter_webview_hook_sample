@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'webview_can_go_back_notifier.dart';
+part of 'url_launcher_wrapper.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$webViewCanGoBackNotifierHash() =>
-    r'0b07229ce434fd65b5c581e03ea10c0af123d70e';
+String _$urlLauncherWrapperHash() =>
+    r'124f1fb46e8037e031fcc5355614d022cd5ca3c6';
 
-/// See also [WebViewCanGoBackNotifier].
-@ProviderFor(WebViewCanGoBackNotifier)
-final webViewCanGoBackNotifierProvider =
-    AutoDisposeNotifierProvider<WebViewCanGoBackNotifier, bool>.internal(
-  WebViewCanGoBackNotifier.new,
-  name: r'webViewCanGoBackNotifierProvider',
+/// See also [urlLauncherWrapper].
+@ProviderFor(urlLauncherWrapper)
+final urlLauncherWrapperProvider =
+    AutoDisposeProvider<UrlLauncherWrapper>.internal(
+  urlLauncherWrapper,
+  name: r'urlLauncherWrapperProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$webViewCanGoBackNotifierHash,
+      : _$urlLauncherWrapperHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$WebViewCanGoBackNotifier = AutoDisposeNotifier<bool>;
+typedef UrlLauncherWrapperRef = AutoDisposeProviderRef<UrlLauncherWrapper>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

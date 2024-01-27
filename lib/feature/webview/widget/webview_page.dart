@@ -9,11 +9,11 @@ import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_controller.dart';
 import 'package:flutter_webview_hook_sample/hook/use_app_logger.dart';
 import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
+import 'package:flutter_webview_hook_sample/hook/use_url_launcher_wrapper.dart';
 import 'package:flutter_webview_hook_sample/widget/body_container.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class WebViewPage extends HookConsumerWidget {
   const WebViewPage({
@@ -32,6 +32,7 @@ class WebViewPage extends HookConsumerWidget {
     final currentUrl = useState(initialUrl);
     final currentProgress = useState(0);
     final canGoBack = useWebViewCanGoBack();
+    final urlLauncherWrapper = useUrlLauncherWrapper();
 
     useInitialUrlEffect(
       webViewController: webViewController,
@@ -58,6 +59,7 @@ class WebViewPage extends HookConsumerWidget {
             webViewController: webViewController,
             currentUrl: currentUrl,
             currentProgress: currentProgress,
+            urlLauncherWrapper: urlLauncherWrapper,
           ),
         ),
       ),
@@ -113,6 +115,7 @@ class WebViewPage extends HookConsumerWidget {
     required ObjectRef<InAppWebViewController?> webViewController,
     required ValueNotifier<String> currentUrl,
     required ValueNotifier<int> currentProgress,
+    required UrlLauncherWrapper urlLauncherWrapper,
   }) {
     final GlobalKey webViewKey = useMemoized(GlobalKey.new);
     final webViewSettings = useMemoized(buildWebViewSettings);
@@ -150,9 +153,9 @@ class WebViewPage extends HookConsumerWidget {
               'javascript',
               'about',
             ].contains(uri.scheme)) {
-              if (await canLaunchUrl(uri)) {
+              if (await urlLauncherWrapper.canLaunchUrl(uri)) {
                 // Launch the App
-                await launchUrl(
+                await urlLauncherWrapper.launchUrl(
                   uri,
                 );
                 // and cancel the request
