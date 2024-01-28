@@ -18,31 +18,28 @@ class ScaffoldWithNavBar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = useL10n();
 
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        body: child,
-        bottomNavigationBar: NavigationBar(
-          destinations: [
-            NavigationDestination(
-              icon: const Icon(FontAwesomeIcons.globe),
-              label: l10n.webviewTitleTab1,
-            ),
-            NavigationDestination(
-              icon: const Icon(FontAwesomeIcons.globe),
-              label: l10n.webviewTitleTab2,
-            ),
-            NavigationDestination(
-              icon: const Icon(FontAwesomeIcons.gear),
-              label: l10n.settingTitle,
-            ),
-          ],
-          selectedIndex: _selectedIndex(context, ref),
-          onDestinationSelected: (index) => _onDestinationSelected(
-            context,
-            ref,
-            index: index,
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: NavigationBar(
+        destinations: [
+          NavigationDestination(
+            icon: const Icon(FontAwesomeIcons.globe),
+            label: l10n.webviewTitleTab1,
           ),
+          NavigationDestination(
+            icon: const Icon(FontAwesomeIcons.globe),
+            label: l10n.webviewTitleTab2,
+          ),
+          NavigationDestination(
+            icon: const Icon(FontAwesomeIcons.gear),
+            label: l10n.settingTitle,
+          ),
+        ],
+        selectedIndex: _selectedIndex(context, ref),
+        onDestinationSelected: (index) => _onDestinationSelected(
+          context,
+          ref,
+          index: index,
         ),
       ),
     );

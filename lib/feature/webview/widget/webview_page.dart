@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_initial_url_effect.dart';
@@ -47,23 +48,39 @@ class WebViewPage extends HookConsumerWidget {
       webViewController: webViewController,
     );
 
-    return Scaffold(
-      appBar: _appBar(
-        context,
-        ref,
-        webViewController: webViewController,
-        showLeading: canGoBack.state,
-      ),
-      body: SafeArea(
-        child: BodyContainer(
-          child: _body(
-            context,
-            ref,
-            appLogger: appLogger,
-            webViewController: webViewController,
-            currentUrl: currentUrl,
-            currentProgress: currentProgress,
-            urlLauncherWrapper: urlLauncherWrapper,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          return;
+        }
+
+        if (canGoBack.state) {
+          webViewController.value?.goBack();
+        } else if (context.canPop()) {
+          context.pop();
+        } else {
+          SystemNavigator.pop();
+        }
+      },
+      child: Scaffold(
+        appBar: _appBar(
+          context,
+          ref,
+          webViewController: webViewController,
+          showLeading: canGoBack.state,
+        ),
+        body: SafeArea(
+          child: BodyContainer(
+            child: _body(
+              context,
+              ref,
+              appLogger: appLogger,
+              webViewController: webViewController,
+              currentUrl: currentUrl,
+              currentProgress: currentProgress,
+              urlLauncherWrapper: urlLauncherWrapper,
+            ),
           ),
         ),
       ),
