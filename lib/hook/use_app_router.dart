@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_webview_hook_sample/feature/locale_setting/widget/locale_setting_page.dart';
 import 'package:flutter_webview_hook_sample/feature/not_found/widget/not_found_page.dart';
 import 'package:flutter_webview_hook_sample/feature/setting/widget/setting_page.dart';
-import 'package:flutter_webview_hook_sample/feature/webview/riverpod/webview_can_go_back_notifier.dart';
-import 'package:flutter_webview_hook_sample/feature/webview/riverpod/webview_request_go_back_notifier.dart';
+// import 'package:flutter_webview_hook_sample/feature/webview/riverpod/webview_can_go_back_notifier.dart';
+// import 'package:flutter_webview_hook_sample/feature/webview/riverpod/webview_request_go_back_notifier.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/widget/webview_page.dart';
 import 'package:flutter_webview_hook_sample/riverpod/app_logger.dart';
 import 'package:flutter_webview_hook_sample/widget/scaffold_with_nav_bar.dart';
@@ -18,8 +18,8 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 GoRouter useAppRouter({
   String initialLocation = '/webview?initial_url=https%3A%2F%2Fwww.google.com',
 }) {
-  final context = useContext();
-  final ref = context as WidgetRef;
+  // final context = useContext();
+  // final ref = context as WidgetRef;
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -39,16 +39,16 @@ GoRouter useAppRouter({
                   state.uri.queryParameters['initial_url'] ?? 'about:blank';
               return WebViewPage(initialUrl: initialUrl);
             },
-            onExit: (context) async {
-              final canGoBack = ref.read(webViewCanGoBackNotifierProvider);
-              if (canGoBack) {
-                await ref
-                    .read(webViewRequestGoBackNotifierProvider.notifier)
-                    .setState(true);
-                return false;
-              }
-              return true;
-            },
+            // onExit: (context) async {
+            //   final canGoBack = ref.read(webViewCanGoBackNotifierProvider);
+            //   if (canGoBack) {
+            //     await ref
+            //         .read(webViewRequestGoBackNotifierProvider.notifier)
+            //         .setState(true);
+            //     return false;
+            //   }
+            //   return true;
+            // },
           ),
           GoRoute(
             path: '/setting',
