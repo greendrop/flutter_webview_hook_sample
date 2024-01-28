@@ -5,5 +5,5 @@ part 'app_logger.g.dart';
 
 @Riverpod(keepAlive: true)
 Logger appLogger(AppLoggerRef ref) {
-  return Logger();
+  return Logger(printer: LogfmtPrinter());
 }
