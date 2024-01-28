@@ -202,12 +202,20 @@ class WebViewPage extends HookConsumerWidget {
             currentUrl.value = url.toString();
           },
           onConsoleMessage: (controller, consoleMessage) {
-            appLogger.i(
-              {
-                'message': 'WebViewPage#onConsoleMessage',
-                'consoleMessage': consoleMessage.toString(),
-              }.toString(),
-            );
+            final message = {
+              'message': 'WebViewPage#onConsoleMessage',
+              'consoleMessage': consoleMessage.toString(),
+            }.toString();
+            switch (consoleMessage.messageLevel) {
+              case ConsoleMessageLevel.DEBUG:
+                appLogger.d(message);
+              case ConsoleMessageLevel.WARNING:
+                appLogger.w(message);
+              case ConsoleMessageLevel.ERROR:
+                appLogger.e(message);
+              default:
+                appLogger.i(message);
+            }
           },
         ),
         currentProgress.value < 100
