@@ -17,6 +17,7 @@
   "commonCreatedMessage": "登録しました。",
   "commonUpdatedMessage": "更新しました。",
   "commonDeleteddMessage": "削除しました。",
+  "aboutAppTitle": "このアプリについて",
   "localeSettingTitle": "言語",
   "localeSettingSystem": "システム",
   "localeSettingEnglish": "English",

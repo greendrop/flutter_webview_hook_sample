@@ -17,6 +17,7 @@
   "commonCreatedMessage": "It was created.",
   "commonUpdatedMessage": "It was updated.",
   "commonDeleteddMessage": "It was deleted.",
+  "aboutAppTitle": "About App",
   "localeSettingTitle": "Language",
   "localeSettingSystem": "System",
   "localeSettingEnglish": "English",
