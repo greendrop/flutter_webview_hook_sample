@@ -6,19 +6,22 @@ PullToRefreshController? usePullToRefreshController({
   required ObjectRef<InAppWebViewController?> webViewController,
 }) {
   if (kIsWeb) {
-    return null;
+    return useMemoized(() => null);
   }
 
-  return PullToRefreshController(
-    settings: PullToRefreshSettings(),
-    onRefresh: () async {
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        await webViewController.value?.reload();
-      } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-        await webViewController.value?.loadUrl(
-          urlRequest: URLRequest(url: await webViewController.value?.getUrl()),
-        );
-      }
-    },
+  return useMemoized(
+    () => PullToRefreshController(
+      settings: PullToRefreshSettings(),
+      onRefresh: () async {
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          await webViewController.value?.reload();
+        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+          await webViewController.value?.loadUrl(
+            urlRequest:
+                URLRequest(url: await webViewController.value?.getUrl()),
+          );
+        }
+      },
+    ),
   );
 }
