@@ -3,7 +3,7 @@ import 'package:flutter_webview_hook_sample/config/app_constant.dart';
 import 'package:flutter_webview_hook_sample/feature/locale_setting/hook/use_locale.dart'
     as hook;
 import 'package:flutter_webview_hook_sample/feature/locale_setting/widget/locale_setting_form.dart';
-import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
+import 'package:flutter_webview_hook_sample/hook/use_translations.dart';
 import 'package:flutter_webview_hook_sample/widget/body_container.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -32,10 +32,10 @@ class LocaleSettingPage extends HookConsumerWidget {
   }
 
   AppBar _appBar(BuildContext context, WidgetRef ref) {
-    final l10n = useL10n();
+    final translations = useTranslations();
 
     return AppBar(
-      title: Text(l10n.localeSettingTitle),
+      title: Text(translations.localeSetting.title),
     );
   }
 

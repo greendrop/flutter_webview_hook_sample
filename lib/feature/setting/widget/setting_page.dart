@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_hook_sample/config/app_constant.dart';
 import 'package:flutter_webview_hook_sample/feature/setting/widget/locale_list_tile.dart';
 import 'package:flutter_webview_hook_sample/feature/setting/widget/setting_about_list_tile.dart';
-import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
+import 'package:flutter_webview_hook_sample/hook/use_translations.dart';
 import 'package:flutter_webview_hook_sample/widget/body_container.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -26,10 +26,10 @@ class SettingPage extends HookConsumerWidget {
   }
 
   AppBar _appBar(BuildContext context, WidgetRef ref) {
-    final l10n = useL10n();
+    final translations = useTranslations();
 
     return AppBar(
-      title: Text(l10n.settingTitle),
+      title: Text(translations.setting.title),
     );
   }
 

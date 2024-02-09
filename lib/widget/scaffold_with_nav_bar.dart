@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_hook_sample/feature/setting/widget/setting_page.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/widget/webview_page.dart';
-import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
+import 'package:flutter_webview_hook_sample/hook/use_translations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,7 +16,7 @@ class ScaffoldWithNavBar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = useL10n();
+    final translations = useTranslations();
 
     return Scaffold(
       body: child,
@@ -24,15 +24,15 @@ class ScaffoldWithNavBar extends HookConsumerWidget {
         destinations: [
           NavigationDestination(
             icon: const Icon(FontAwesomeIcons.globe),
-            label: l10n.webviewTitleTab1,
+            label: translations.webview.tab1Title,
           ),
           NavigationDestination(
             icon: const Icon(FontAwesomeIcons.globe),
-            label: l10n.webviewTitleTab2,
+            label: translations.webview.tab2Title,
           ),
           NavigationDestination(
             icon: const Icon(FontAwesomeIcons.gear),
-            label: l10n.settingTitle,
+            label: translations.setting.title,
           ),
         ],
         selectedIndex: _selectedIndex(context, ref),

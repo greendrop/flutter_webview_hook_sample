@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_webview_hook_sample/config/app_theme_data.dart';
 import 'package:flutter_webview_hook_sample/feature/locale_setting/hook/use_locale.dart';
 import 'package:flutter_webview_hook_sample/feature/package_info/hook/use_package_info.dart';
 import 'package:flutter_webview_hook_sample/hook/use_app_router.dart';
-import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
+import 'package:flutter_webview_hook_sample/i18n/strings.g.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AppRoot extends HookConsumerWidget {
@@ -33,16 +34,30 @@ class AppRoot extends HookConsumerWidget {
       [],
     );
 
+    useEffect(
+      () {
+        Future.delayed(Duration.zero, () {
+          if (locale.state == null) {
+            LocaleSettings.useDeviceLocale();
+          } else {
+            LocaleSettings.setLocaleRaw(locale.state!.toString());
+          }
+        });
+        return () {};
+      },
+      [locale.state],
+    );
+
     if (!isInitialized.value) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return MaterialApp.router(
-      localizationsDelegates: L10n.localizationsDelegates,
-      supportedLocales: L10n.supportedLocales,
-      locale: locale.state,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: AppLocaleUtils.supportedLocales,
+      locale: TranslationProvider.of(context).flutterLocale,
       onGenerateTitle: (BuildContext context) =>
-          L10n.of(context)!.commonAppTitle,
+          Translations.of(context).common.appTitle,
       theme: themeDataLight,
       darkTheme: themeDataDark,
       themeMode: ThemeMode.light,
