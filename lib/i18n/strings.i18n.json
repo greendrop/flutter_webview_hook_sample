@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appTitle": "WebView Hook",
+    "ok": "OK",
+    "ng": "NG",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "add": "Add",
+    "create": "Create",
+    "edit": "Edit",
+    "update": "Update",
+    "search": "Search",
+    "cancel": "Cancel",
+    "enable": "enable",
+    "disable": "disable",
+    "createdMessage": "It was created.",
+    "updatedMessage": "It was updated.",
+    "deleteddMessage": "It was deleted."
+  },
+  "aboutApp": {
+    "title": "About App"
+  },
+  "localeSetting": {
+    "title": "Language",
+    "system": "System",
+    "english": "English",
+    "japanese": "日本語"
+  },
+  "setting": {
+    "title": "Setting"
+  },
+  "webview": {
+    "title": "WebView",
+    "tab1Title": "WebView 1",
+    "tab2Title": "WebView 2"
+  }
+}

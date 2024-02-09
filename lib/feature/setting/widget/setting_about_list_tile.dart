@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_hook_sample/config/app_constant.dart';
 import 'package:flutter_webview_hook_sample/feature/package_info/hook/use_package_info.dart'
     as hook;
-import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
+import 'package:flutter_webview_hook_sample/hook/use_translations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,7 +16,7 @@ class SettingAboutListTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = useL10n();
+    final translations = useTranslations();
     final packageInfo = usePackageInfo();
 
     if (packageInfo.state == null) {
@@ -33,7 +33,7 @@ class SettingAboutListTile extends HookConsumerWidget {
         ),
       ),
       applicationVersion: packageInfo.state!.version,
-      child: Text(l10n.aboutAppTitle),
+      child: Text(translations.aboutApp.title),
     );
   }
 }

@@ -10,7 +10,7 @@ import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_can
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_controller.dart';
 import 'package:flutter_webview_hook_sample/feature/webview/hook/use_webview_request_go_back_effect.dart';
 import 'package:flutter_webview_hook_sample/hook/use_app_logger.dart';
-import 'package:flutter_webview_hook_sample/hook/use_l10n.dart';
+import 'package:flutter_webview_hook_sample/hook/use_translations.dart';
 import 'package:flutter_webview_hook_sample/hook/use_url_launcher_wrapper.dart';
 import 'package:flutter_webview_hook_sample/widget/body_container.dart';
 import 'package:go_router/go_router.dart';
@@ -93,9 +93,9 @@ class WebViewPage extends HookConsumerWidget {
     required ObjectRef<InAppWebViewController?> webViewController,
     bool showLeading = false,
   }) {
-    final l10n = useL10n();
+    final translations = useTranslations();
 
-    final title = Text(l10n.webviewTitle);
+    final title = Text(translations.webview.title);
     if (!showLeading) {
       return AppBar(title: title);
     }

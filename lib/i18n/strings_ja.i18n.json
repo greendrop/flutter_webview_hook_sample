@@ -1,0 +1,39 @@
+{
+  "common": {
+    "appTitle": "WebView Hook",
+    "ok": "OK",
+    "ng": "NG",
+    "yes": "はい",
+    "no": "いいえ",
+    "close": "閉じる",
+    "add": "追加",
+    "create": "登録",
+    "edit": "編集",
+    "update": "更新",
+    "search": "検索",
+    "cancel": "キャンセル",
+    "enable": "有効",
+    "disable": "無効",
+    "createdMessage": "登録しました。",
+    "updatedMessage": "更新しました。",
+    "deleteddMessage": "削除しました。"
+  },
+  "aboutApp": {
+    "title": "このアプリについて"
+  },
+  "localeSetting": {
+    "title": "言語",
+    "system": "システム",
+    "english": "English",
+    "japanese": "日本語"
+  },
+  "setting": {
+    "title": "設定"
+  },
+  "webview": {
+    "title": "WebView",
+    "tab1Title": "WebView 1",
+    "tab2Title": "WebView 2"
+  }
+}
+
